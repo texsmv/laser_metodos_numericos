@@ -7,17 +7,14 @@ Nuestro Y = Programa X
 Nuestro Z = Programa Y
 '''
 
-#Obtener axis en el plano X
-def getplanoX(v):
-    return vec(v.x, 0, 0)
+def getplanoXY(v):
+    return vec(v.x, v.y, 0)
 
-#Obtener axis en el plano Y
-def getplanoY(v):
-    return vec(0, v.y, 0)
+def getplanoYZ(v):
+    return vec(0, v.y, v.z)
 
-#Obtener axis en el plano Z
-def getplanoZ(v):
-    return vec(0, 0, v.z)
+def getplanoXZ(v):
+    return vec(v.x, 0, v.z)
 
 #Dibujas ejes
 origen = vec(0, 0, 0)
@@ -52,26 +49,24 @@ class Robot:
         self.art2 = sphere(pos=vec(0, L, b1), radius=0.2, texture=textures.metal)
 
     def RotarBrazo1(self, angulo):
-        n = 100
+        n = 10000
         dangulo = angulo/n
         for i in range(0, n):
-            rate(100)
-            self.brazo1.rotate(angle=radians(dangulo), axis=getplanoY(self.art1.pos), origin=self.art1.pos)
-            self.art2.rotate(angle=radians(dangulo), axis=getplanoY(self.art1.pos), origin=self.art1.pos)
-            self.brazo2.rotate(angle=radians(dangulo), axis=getplanoY(self.art1.pos), origin=self.art1.pos)
+            self.brazo1.rotate(angle=radians(dangulo), axis=getplanoXY(self.art1.pos), origin=self.art1.pos)
+            self.art2.rotate(angle=radians(dangulo), axis=getplanoXY(self.art1.pos), origin=self.art1.pos)
+            self.brazo2.rotate(angle=radians(dangulo), axis=getplanoXY(self.art1.pos), origin=self.art1.pos)
 
     def RotarBrazo2(self, angulo):
-        n = 100
+        n = 10000
         dangulo = angulo/n
         for i in range(0, n):
-            rate(100)
-            self.brazo2.rotate(angle=radians(dangulo), axis=getplanoZ(self.art2.pos), origin=self.art2.pos)
+            self.brazo2.rotate(angle=radians(dangulo), axis=getplanoXZ(self.art2.pos) , origin=self.art2.pos)
 
 #Inicializacion del Robot
 R = Robot(5, 2.5, 2)
 
 #Mover brazos
 while True:
-    rate(5)
+    rate(20)
     R.RotarBrazo1(45)
     R.RotarBrazo2(-45)
