@@ -52,17 +52,19 @@ class Robot:
         self.art2 = sphere(pos=vec(0, L, b1), radius=0.2, texture=textures.metal)
 
     def RotarBrazo1(self, angulo):
-        n = 10000
+        n = 100
         dangulo = angulo/n
         for i in range(0, n):
+            rate(100)
             self.brazo1.rotate(angle=radians(dangulo), axis=getplanoY(self.art1.pos), origin=self.art1.pos)
             self.art2.rotate(angle=radians(dangulo), axis=getplanoY(self.art1.pos), origin=self.art1.pos)
             self.brazo2.rotate(angle=radians(dangulo), axis=getplanoY(self.art1.pos), origin=self.art1.pos)
 
     def RotarBrazo2(self, angulo):
-        n = 10000
+        n = 100
         dangulo = angulo/n
         for i in range(0, n):
+            rate(100)
             self.brazo2.rotate(angle=radians(dangulo), axis=getplanoZ(self.art2.pos), origin=self.art2.pos)
 
 #Inicializacion del Robot
