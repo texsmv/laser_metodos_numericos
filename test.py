@@ -42,26 +42,28 @@ mesa = DibujarMesa(10, 0.2, 16)
 #Luz
 luz = local_light(pos=vec(-5, 5, 0), color=color.white)
 
-#Dibujar robot
-brazo1 = cylinder(pos=vec(0, 0, 0), axis=vec(0, 5, 0), radius=0.2, texture=textures.metal)
-brazo2 = cylinder(pos=vec(0, 5, 0), axis=vec(0, 0, 2.5), radius=0.2, texture=textures.metal)
-brazo3 = cylinder(pos=vec(0, 5, 2.5), axis=vec(0, -2, 0), radius=0.2, texture=textures.metal)
+#Declaracion del Robot
+class Robot:
+    def __init__(self, L, b1, b2):
+        self.parante = cylinder(pos=vec(0, 0, 0), axis=vec(0, L, 0), radius=0.2, texture=textures.metal)
+        self.brazo1 = cylinder(pos=vec(0, L, 0), axis=vec(0, 0, b1), radius=0.2, texture=textures.metal)
+        self.brazo2 = cylinder(pos=vec(0, L, b1), axis=vec(0, -b2, 0), radius=0.2, texture=textures.metal)
+        self.art1 = sphere(pos=vec(0, L, 0), radius=0.2, texture=textures.metal)
+        self.art2 = sphere(pos=vec(0, L, b1), radius=0.2, texture=textures.metal)
 
-art1 = sphere(pos=vec(0, 5, 0), radius=0.2, texture=textures.metal)
-art2 = sphere(pos=vec(0, 5, 2.5), radius=0.2, texture=textures.metal)
+    def RotarBrazo1(self, angulo):
+        self.brazo1.rotate(angle=radians(angulo), axis=getplanoY(self.art1.pos), origin=self.art1.pos)
+        self.art2.rotate(angle=radians(angulo), axis=getplanoY(self.art1.pos), origin=self.art1.pos)
+        self.brazo2.rotate(angle=radians(angulo), axis=getplanoY(self.art1.pos), origin=self.art1.pos)
 
-#Mover Brazo1
-def RotarBrazo1(angulo):
-    brazo2.rotate(angle=radians(angulo), axis=getplanoY(art1.pos), origin=art1.pos)
-    art2.rotate(angle=radians(angulo), axis=getplanoY(art1.pos), origin=art1.pos)
-    brazo3.rotate(angle=radians(angulo), axis=getplanoY(art1.pos), origin=art1.pos)
+    def RotarBrazo2(self, angulo):
+        self.brazo2.rotate(angle=radians(angulo), axis=getplanoZ(self.art2.pos), origin=self.art2.pos)
 
-#Mover Brazo2
-def RotarBrazo2(angulo):
-    brazo3.rotate(angle=radians(angulo), axis=getplanoZ(art2.pos), origin=art2.pos)
+#Inicializacion del Robot
+R = Robot(5, 2.5, 2)
 
 #Mover brazos
 while True:
     rate(5)
-    RotarBrazo1(45)
-    RotarBrazo2(-45)
+    R.RotarBrazo1(45)
+    R.RotarBrazo2(-45)
