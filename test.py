@@ -1,5 +1,6 @@
 from vpython import *
 import numpy as np
+from newton_nolineal import *
 
 '''
 Para nuestro problema:
@@ -52,43 +53,17 @@ luz = local_light(pos=vec(-5, 5, 0), color=color.white)
 #Declaracion del Robot
 class Robot:
     def __init__(self, L, b1, b2):
+        self.L = L
+        self.b2 = b2
         self.parante = cylinder(pos=vec(0, 0, 0), axis=vec(0, L, 0), radius=0.2, texture=textures.metal)
         self.brazo1 = cylinder(pos=vec(0, L, 0), axis=vec(0, 0, b1), radius=0.2, texture=textures.metal)
         self.brazo2 = cylinder(pos=vec(0, L, b1), axis=vec(0, -b2, 0), radius=0.2, texture=textures.metal)
         self.art1 = sphere(pos=vec(0, L, 0), radius=0.2, texture=textures.metal)
         self.art2 = sphere(pos=vec(0, L, b1), radius=0.2, texture=textures.metal)
-        self.L = L
-        self.b2 = b2
         self.art3 =  sphere(pos=self.brazo2.pos + self.brazo2.axis, radius=0.25, texture=textures.metal)
-        self.Ppos = [np.array([-1,0,0]), np.array([1,0,0])]
-        #self.pointer_direction = self.brazo2.axis
         self.pointer = cylinder(pos=self.art3.pos, axis=self.brazo2.axis - self.art3.pos, radius=0.05)
         self.pointer.visible = False
-    def RotarBrazo1(self, angulo):
-        n = 10000
-        dangulo = angulo/n
-        for i in range(0, n):
-            rate(500000)
-            self.brazo1.rotate(angle=radians(dangulo), axis=getplanoXY(self.art1.pos), origin=self.art1.pos)
-            self.art2.rotate(angle=radians(dangulo), axis=getplanoXY(self.art1.pos), origin=self.art1.pos)
-            self.brazo2.rotate(angle=radians(dangulo), axis=getplanoXY(self.art1.pos), origin=self.art1.pos)
-            self.art3.pos = self.brazo2.pos + self.brazo2.axis
-            
-            
-
-    def RotarBrazo2(self, angulo):
-        n = 10000
-        dangulo = angulo/n
-        for i in range(0, n):
-            rate(500000)
-            self.brazo2.rotate(angle=radians(dangulo), axis=getplanoXZ(self.art2.pos) , origin=self.art2.pos)
-            self.art3.pos = self.brazo2.pos + self.brazo2.axis
-            
-
-    def dibujar_puntos(self):
-        self.puntos = points(pos=[vector(-1,0,0), vector(1,0,0)], radius=3,color=color.red)
-
-    
+             
     def apuntar_punto(self):
         self.pointer.visible = True
         self.pointer.pos = self.art3.pos
@@ -96,22 +71,44 @@ class Robot:
         self.pointer.axis= vector(self.brazo2.axis.x * temp - self.brazo2.axis.x, self.brazo2.axis.y * temp -self.brazo2.axis.y , self.brazo2.axis.z * temp - self.brazo2.axis.z)
         self.pointer.color = vector(1,0,0)
         
-        
     def borrar_punto(self):
         self.pointer.visible = False
         
+    def RotarBrazo1(self, angulo):
+        n = 10000
+        dangulo = angulo/n
+        for i in range(0, n):
+            rate(500000)
+            self.brazo1.rotate(angle=dangulo, axis=getplanoXY(self.art1.pos), origin=self.art1.pos)
+            self.art2.rotate(angle=dangulo, axis=getplanoXY(self.art1.pos), origin=self.art1.pos)
+            self.brazo2.rotate(angle=dangulo, axis=getplanoXY(self.art1.pos), origin=self.art1.pos)
+            self.art3.pos = self.brazo2.pos + self.brazo2.axis
+            self.apuntar_punto()
+
+    def RotarBrazo2(self, angulo):
+        n = 10000
+        dangulo = angulo/n
+        for i in range(0, n):
+            rate(500000)
+            self.brazo2.rotate(angle=dangulo, axis=getplanoXZ(self.art2.pos) , origin=self.art2.pos)
+            self.art3.pos = self.brazo2.pos + self.brazo2.axis
+            self.apuntar_punto()        
         
 #Inicializacion del Robot
-R = Robot(5, 2.5, 2)
-R.dibujar_puntos()
 scene.autoscale = False
 scene.autocenter = False
-#Mover brazos
-while True:
-    R.apuntar_punto()
-    R.RotarBrazo1(45)
-    R.RotarBrazo2(-45)
-    R.borrar_punto()
+punto = sphere(pos=vec(15, 0, 7), radius=0.1, color=color.blue)
+X0 = [1,1]
+X = newton_nolineal(X0,100)
+print(X)
+R = Robot(5, 2.5, 2)
+print(X[0])
+print(-X[1])
+#180 -> 3.14159
+
+R.RotarBrazo1(X[0]%6.28319)
+R.RotarBrazo2(-X[1]%6.28319)
+
     
     
     

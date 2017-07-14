@@ -153,8 +153,8 @@ def calc_descomposicion_PLU(A,b):
 
 def F(X): #los puntos mas?
     F = []
-    F.append(10*cos(X[0]) + 40*tan(X[1])*sin(X[0]) - 30)
-    F.append(10*sin(X[0]) - 40*tan(X[1])*cos(X[0]) + 0)
+    F.append(2.5*cos(X[0]) + 5*tan(X[1])*sin(X[0]) - (7))
+    F.append(2.5*sin(X[0]) - 5*tan(X[1])*cos(X[0]) - (15))
     return F
 
 def JacobAprox(X0,h):
@@ -173,10 +173,9 @@ def newton_nolineal(X0,N):
         X0 = resta_vector(X0,d)
     return X0
 
-def main():
+'''def main():
     X0 = [-1.6,1.6]
-    X = newton_nolineal(X0,100)
-    print(X)
+    X = newton_nolineal(X0,100)'''
   
 
 
