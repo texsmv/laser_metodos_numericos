@@ -43,10 +43,7 @@ def convert_vector2matriz(a):
 
 #make vector null
 def make_vector_null(n):
-    a = []
-    for i in range(n):
-        a.append(0)
-    return a
+    return [0]*n
 
 def sust_regre(A,b):
     n = len(A)
@@ -69,25 +66,28 @@ def sust_progre(A,b):
     return X
 
 def suma_vector(a,b):
+    c = a[:]
     if(len(a) == len(b)):
         for i in range(len(a)):
-            a[i] += b[i]
-        return a
+            c[i] += b[i]
+        return c
     else:
         return
 
 def resta_vector(a,b):
+    c = a[:]
     if(len(a) == len(b)):
         for i in range(len(a)):
-            a[i] -= b[i]
-        return a
+            c[i] -= b[i]
+        return c
     else:
         return
 
 def vector_x_escalar(a,e):
+    c = a[:]
     for i in range(len(a)):
-        a[i] *= e
-    return a
+        c[i] *= e
+    return c
 
 #make matriz identidad
 def make_matriz_identidad(n):
@@ -153,38 +153,31 @@ def calc_descomposicion_PLU(A,b):
 
 def F(X): #los puntos mas?
     F = []
-    F.append(10*cos(X[0]) + 40*tan(X[1]*sin(X[0])) - 30)
-    F.append(10*sin(X[0]) - 40*tan(X[1]*cos(X[0])) + 0)
+    F.append(10*cos(X[0]) + 40*tan(X[1])*sin(X[0]) - 30)
+    F.append(10*sin(X[0]) - 40*tan(X[1])*cos(X[0]) + 0)
     return F
 
 def JacobAprox(X0,h):
     n = len(X0)
     I = make_matriz_identidad(n)
-    JF = make_matriz_null(n)
+    JF = [[0] * n for i in range(n)]
     for i in range(n):
         for j in range(n):
             JF[i][j] = (F(suma_vector(X0,vector_x_escalar(I[j],h)))[i] - F(X0)[i])/h
     return JF
 def newton_nolineal(X0,N):
-    print(X0)
     for i in range(N):
-        JF = JacobAprox(X0,0.000001)
-        print(JF)
+        
+        JF = JacobAprox(X0,0.00000000000001)
         d = calc_descomposicion_PLU(JF,F(X0))
-        X0 = X0 - d
+        X0 = resta_vector(X0,d)
     return X0
 
 def main():
     X0 = [-1.6,1.6]
     X = newton_nolineal(X0,100)
     print(X)
-
-
-
-
-
-
-
+  
 
 
 
