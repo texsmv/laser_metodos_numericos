@@ -8,15 +8,6 @@ Nuestro X = Programa Z
 Nuestro Y = Programa X
 Nuestro Z = Programa Y
 '''
-def to_vector(x):
-    v = vector(x[0], x[1], x[2])    
-    return v
-
-def points_to_vector(X):
-    points = []
-    for e in X:
-        points.append(to_vector(e))
-    return points
 
 def getplanoXY(v):
     return vec(v.x, v.y, 0)
@@ -102,13 +93,13 @@ X0 = [1,1]
 X = newton_nolineal(X0,100)
 print(X)
 R = Robot(5, 2.5, 2)
-print(X[0])
-print(-X[1])
+#print(X[0])
+#print(-X[1])
 #180 -> 3.14159
 
 R.RotarBrazo1(X[0]%6.28319)
-R.RotarBrazo2(-X[1]%6.28319)
+R.RotarBrazo2(-X[1]%pi)
 
     
-    
+
     

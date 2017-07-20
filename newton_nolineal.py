@@ -165,12 +165,29 @@ def JacobAprox(X0,h):
         for j in range(n):
             JF[i][j] = (F(suma_vector(X0,vector_x_escalar(I[j],h)))[i] - F(X0)[i])/h
     return JF
+
+def restringir_angulos(X0, x, y):
+    if X0[0]%6.28319 > pi:
+        X0[0] -= 2*pi
+    elif X0[0]%6.28319 < -pi:
+        X0[0] += 2*pi
+    if X0[1]%pi > pi/2:
+        X0[1] -= pi
+    elif X0[1]%pi < pi/2:
+        X0[1] += pi
+    if abs(X0[0])%6.28319 > pi/2:
+        fi = X0[0] - atan(y/x)
+        X0[0] -= 2*fi
+        X0[1] = -X0[1]
+    return X0
+
 def newton_nolineal(X0,N):
     for i in range(N):
         
         JF = JacobAprox(X0,0.00000000000001)
         d = calc_descomposicion_PLU(JF,F(X0))
         X0 = resta_vector(X0,d)
+    X0 = restringir_angulos(X0, 7, 15)
     return X0
 
 '''def main():
